@@ -74,7 +74,9 @@ const LocationPicker = ({onPickLocation}) => {
     }
 
     const pickOnMapHandler = () => {
-        navigation.navigate('Map', location ? location : null)
+        console.log('IN PICKONMAPHANDLER location', location)
+        console.log('IN PICKONMAPHANDLER ', {...location, mode: 'save'})
+        navigation.navigate('Map', location ? {...location, mode: 'save'} : {mode: 'save'})
     }
 
     let locationPreview = <View style={styles.noLocation}><Text>No location chosen yet!</Text></View>

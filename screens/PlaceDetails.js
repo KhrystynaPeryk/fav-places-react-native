@@ -9,7 +9,8 @@ const PlaceDetails = ({route, navigation}) => {
     const showOnMapHandler = () => {
         navigation.navigate('Map', {
             latitude: fetchedPlace.lat,
-            longitude: fetchedPlace.lng
+            longitude: fetchedPlace.lng,
+            mode: 'view'
         })
     }
 

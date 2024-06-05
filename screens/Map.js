@@ -4,7 +4,7 @@ import MapView, { Marker } from "react-native-maps";
 import IconButton from "../UI/IconButton";
 
 const Map = ({navigation, route}) => {
-    const initialLocation = route.params && {latitude: route.params.latitude, longitude: route.params.longitude} 
+    const initialLocation = route.params.latitude && route.params.longitude && {latitude: route.params.latitude, longitude: route.params.longitude} 
 
     const [selectedLocation, setSelectedLocation] = useState(initialLocation)
 
@@ -16,10 +16,12 @@ const Map = ({navigation, route}) => {
     }
 
     const selectLocationHandler = (event) => {
-        const lat = event.nativeEvent.coordinate.latitude
-        const lng = event.nativeEvent.coordinate.longitude
-
-        setSelectedLocation({latitude: lat, longitude: lng})
+        if (route.params.mode === 'save') {
+            const lat = event.nativeEvent.coordinate.latitude
+            const lng = event.nativeEvent.coordinate.longitude
+    
+            setSelectedLocation({latitude: lat, longitude: lng})
+        }
     }
 
     // wrapping the func into useCallback hook to avoid potential rerendering and infinite loops
@@ -36,11 +38,13 @@ const Map = ({navigation, route}) => {
     }, [navigation,selectedLocation])
     
     useLayoutEffect(() => {
-        navigation.setOptions({
-            headerRight: ({tintColor}) => <IconButton icon='save' size={24} color={tintColor} onPress={savedPickedLocationHandler} />
-        })
+        if (route.params.mode === 'save') {
+            navigation.setOptions({
+                headerRight: ({tintColor}) => <IconButton icon='save' size={24} color={tintColor} onPress={savedPickedLocationHandler} />
+            })
+        }
         // since we are passing a function here in dependencies, we need to use useCallback hook to avoid potential rerender, infinite loops
-    }, [navigation, savedPickedLocationHandler])
+    }, [navigation, savedPickedLocationHandler, route])
 
     return (
         <MapView 
